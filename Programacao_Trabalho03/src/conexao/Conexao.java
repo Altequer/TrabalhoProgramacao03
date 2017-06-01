@@ -1,4 +1,4 @@
-package Conexao;
+package conexao;
 
 public class Conexao {
 
