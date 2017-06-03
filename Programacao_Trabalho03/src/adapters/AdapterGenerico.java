@@ -6,10 +6,6 @@ public abstract class AdapterGenerico {
 
 	private ArrayList<Cd> listaCds = null;
 
-	public AdapterGenerico() {
-		this.setListaCds(new ArrayList<>());
-	}
-
 	public void AddLista(Cd cd) {
 		this.listaCds.add(cd);
 	}

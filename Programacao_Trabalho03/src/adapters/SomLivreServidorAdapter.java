@@ -1,5 +1,7 @@
 package adapters;
 
+import java.util.ArrayList;
+
 import javax.swing.JOptionPane;
 import conexao.SomLivreServidor;
 
@@ -12,7 +14,8 @@ public class SomLivreServidorAdapter extends AdapterGenerico {
 
 	private void carregarLista() {
 		if (this.conectar()) {
-
+			
+			this.setListaCds(new ArrayList<>());
 			String[] informacoes = this.somServidor.buscaCD();
 
 			for (int i = 0; i < informacoes.length; i++) {
@@ -42,8 +45,6 @@ public class SomLivreServidorAdapter extends AdapterGenerico {
 
 	@Override
 	public boolean deconectar() {
-
-		this.setListaCds(null);
 		this.somServidor = null;
 
 		return true;

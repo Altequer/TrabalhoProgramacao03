@@ -1,5 +1,7 @@
 package adapters;
 
+import java.util.ArrayList;
+
 import javax.swing.JOptionPane;
 
 import org.omg.PortableServer.POAPackage.ServantNotActive;
@@ -14,8 +16,10 @@ public class  SubmarinoProductsAdapter extends AdapterGenerico{
 
 	private void carregarLista() {
 		if (this.conectar()) {
-
+			
+			this.setListaCds(new ArrayList<>());
 			String[][] informacoes;
+			
 			try {
 				informacoes = this.subMarino.getCDProducts();
 
@@ -26,6 +30,7 @@ public class  SubmarinoProductsAdapter extends AdapterGenerico{
 			} catch (ServantNotActive e) {
 				JOptionPane.showMessageDialog(null, "Não foi possível carregar lista!", "Atenção", JOptionPane.ERROR_MESSAGE);
 			}
+			this.deconectar();
 		}else{
 			JOptionPane.showMessageDialog(null, "Verificar conexão!", "Atenção", JOptionPane.ERROR_MESSAGE);
 		}
@@ -48,8 +53,6 @@ public class  SubmarinoProductsAdapter extends AdapterGenerico{
 
 	@Override
 	public boolean deconectar() {
-
-		this.setListaCds(null);
 		this.subMarino = null;
 
 		return true;
