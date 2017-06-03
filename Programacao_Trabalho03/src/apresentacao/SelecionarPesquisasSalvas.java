@@ -20,6 +20,8 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
+import adapters.Cd;
+
 public class SelecionarPesquisasSalvas extends JDialog {
 
 	private static final long serialVersionUID = 1;
@@ -29,6 +31,7 @@ public class SelecionarPesquisasSalvas extends JDialog {
 	private JLabel lbText;
 	@SuppressWarnings("rawtypes")
 	private HashMap<File, ArrayList> pesquisas = null;
+
 
 	public SelecionarPesquisasSalvas() {
 		super();
@@ -89,7 +92,8 @@ public class SelecionarPesquisasSalvas extends JDialog {
 		btSelecionar.setBounds(252, 243, 100, 24);
 		btSelecionar.addActionListener(new ActionListener() {			
 			@Override
-			public void actionPerformed(ActionEvent e) {				 
+			public void actionPerformed(ActionEvent e) {	
+				dispose();
 			}
 		});
 		this.add(btSelecionar);
@@ -160,5 +164,19 @@ public class SelecionarPesquisasSalvas extends JDialog {
 
 		this.tabela.setModel(tabelaModelo);
 		this.tabela.setCursor(Cursor.getDefaultCursor());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public ArrayList<Cd> getPesquisas() {
+		int linhaSelecionada = this.tabela.getSelectedRow();
+
+		if(linhaSelecionada > -1 && this.pesquisas != null && this.pesquisas.size() > 0){
+			for (File file : this.pesquisas.keySet()) {	
+				if(this.tabela.getValueAt(linhaSelecionada, 1) == file.getAbsolutePath()){
+					return this.pesquisas.get(file);
+				}
+			}
+		}
+		return null;
 	}
 }

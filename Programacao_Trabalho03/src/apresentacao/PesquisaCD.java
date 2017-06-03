@@ -104,7 +104,10 @@ public class PesquisaCD extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {				 
 				setVisible(false);
-				new SelecionarPesquisasSalvas();
+				ArrayList<Cd> listaRetorno =  new SelecionarPesquisasSalvas().getPesquisas();
+				
+				setListaCdEscolhido(listaRetorno);
+				carregaGrid();
 				setVisible(true);			
 			}
 		});
