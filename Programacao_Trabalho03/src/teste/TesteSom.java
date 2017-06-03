@@ -1,5 +1,9 @@
 package teste;
 
+import java.util.ArrayList;
+
+import adapters.Cd;
+import adapters.SomLivreServidorAdapter;
 import conexao.SomLivreServidor;
 
 public class TesteSom {
@@ -12,7 +16,15 @@ public class TesteSom {
 		
 		
 		for (int i = 0; i < retorno.length; i++) {
-			System.out.println(retorno[i]);
+		//	System.out.println(retorno[i]);
+		}
+		
+		SomLivreServidorAdapter adpter = new SomLivreServidorAdapter();
+		
+		ArrayList<Cd> listaAux = adpter.procurar("p");
+		
+		for (int i = 0; i < listaAux.size(); i++) {
+			System.out.println(listaAux.get(i).toString());
 		}
 		
 	}

@@ -9,8 +9,7 @@ public class SomLivreServidorAdapter {
 	
 	public SomLivreServidorAdapter() {
 		listaCds = new ArrayList<>();
-		somServidor =  new SomLivreServidor();
-		
+		this.conectar();
 		this.carregarLista();
 	}
 	
@@ -24,18 +23,13 @@ public class SomLivreServidorAdapter {
 		String[] informacoes = this.somServidor.buscaCD();
 		
 		for (int i = 0; i < informacoes.length; i++) {
-			String[] infos = informacoes[i].split("|");
 			
-			for (int j = 0; j < infos.length; j++) {
-				this.AddLista(new Cd(infos[j], "", "", infos[j++], Integer.parseInt(infos[j+2])));
-				j += 2;
-			}
-			
+			String[] infos = informacoes[i].replace("|", "\n").split("\n");
+			this.AddLista(new Cd(infos[0], "", "", infos[1], Float.parseFloat(infos[2].trim())));
 		}
 	}
 	
-	@SuppressWarnings("unused")
-	private ArrayList<Cd> procurar(String palavra) {
+	public ArrayList<Cd> procurar(String palavra) {
 		ArrayList<Cd> listaRetorno = new ArrayList<>();
 		
 		for (int i = 0; i < this.listaCds.size(); i++) {
@@ -48,11 +42,19 @@ public class SomLivreServidorAdapter {
 	}
 	
 	private void conectar() {
+		this.somServidor =  new SomLivreServidor();
 		this.somServidor.registrar("Connectar");
 	}
 	
 	@SuppressWarnings("unused")
 	private void deconectar() {
 		this.listaCds = null;
+	}
+	
+	public boolean isConnectado(){
+		if(this.somServidor != null){
+			return true;
+		}
+		return false;
 	}
 }
