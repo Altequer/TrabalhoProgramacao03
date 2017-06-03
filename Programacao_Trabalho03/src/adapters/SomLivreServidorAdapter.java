@@ -27,7 +27,7 @@ public class SomLivreServidorAdapter {
 			String[] infos = informacoes[i].split("|");
 			
 			for (int j = 0; j < infos.length; j++) {
-				this.AddLista(new Cd(infos[j++], "", infos[j],  Integer.parseInt(infos[j+2])));
+				this.AddLista(new Cd(infos[j], "", "", infos[j++], Integer.parseInt(infos[j+2])));
 				j += 2;
 			}
 			

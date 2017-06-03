@@ -1,14 +1,36 @@
 package adapters;
 
 public class Cd {
-	private String nome, genero, album;
+	private String nome, genero, album, artista;
+	public String getArtista() {
+		return artista;
+	}
+
+	public void setArtista(String artista) {
+		this.artista = artista;
+	}
+
 	private float valor;
 	
-	public Cd(String nome, String genero, String album, float valor) {
+	public Cd(String nome, String genero, String album, String artista,float valor) {
 		this.setNome(nome);
 		this.setValor(valor);
 		this.setAlbum(album);
 		this.setGenero(genero);
+		this.setArtista(artista);
+	}
+	
+	@Override
+	public String toString() {
+		String retorno;
+		
+		retorno = ("Cd: " + this.getNome() +
+				(this.getAlbum().isEmpty() ? "" : "\n\rAlbum: " + this.getAlbum()) +
+				(this.getArtista().isEmpty() ? "" : "\n\rArtista: " + this.getArtista()) +
+				(this.getGenero().isEmpty() ? "" : "\n\rGenero: " + this.getGenero()) +
+				(this.getValor() > 0 ? "" : "\n\rValor: " + this.getValor()));
+						
+		return retorno;
 	}
 	
 	public boolean comparar(String palavra) {
@@ -20,12 +42,6 @@ public class Cd {
 		return false;
 	}
 	
-	@Override
-	public String toString() {
-		String retorno;
-		
-		return super.toString();
-	}
 
 	public String getNome() {
 		return nome;
