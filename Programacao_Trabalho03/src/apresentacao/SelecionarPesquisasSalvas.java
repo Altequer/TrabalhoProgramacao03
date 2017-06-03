@@ -1,14 +1,23 @@
 package apresentacao;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 public class SelecionarPesquisasSalvas extends JDialog {
@@ -18,6 +27,8 @@ public class SelecionarPesquisasSalvas extends JDialog {
 	private JButton btSelecionar;
 	private JTable tabela;
 	private JLabel lbText;
+	@SuppressWarnings("rawtypes")
+	private HashMap<File, ArrayList> pesquisas = null;
 
 	public SelecionarPesquisasSalvas() {
 		super();
@@ -33,12 +44,15 @@ public class SelecionarPesquisasSalvas extends JDialog {
 		this.setResizable(false);
 		this.setAlwaysOnTop(false);
 		this.setLayout(null);
+		this.pesquisas = new HashMap<>();
 
 		// Adiciona componentes no formulário
 
 		addLabel();
 		addButton();
 		addGrid();
+		buscaArquivos();
+		carregaGrid();
 
 		// Repinta os componentes na tela
 		this.repaint();
@@ -53,11 +67,15 @@ public class SelecionarPesquisasSalvas extends JDialog {
 	}
 
 	private void addGrid() {
-		String[] coluna = new String[]{"Descrição da pesquisa", "Data"};
-
 		tabela = new JTable();
-		DefaultTableModel model = new DefaultTableModel(coluna, 0);
+		DefaultTableModel model = new DefaultTableModel(new String[]{"Nome", "Caminho"}, 0);
 		tabela.setModel(model);
+		tabela.setDefaultEditor(Object.class, null);
+		tabela.getTableHeader().setReorderingAllowed(false);
+		tabela.getTableHeader().setResizingAllowed(true);
+		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tabela.setShowHorizontalLines(true);
+		tabela.setShowVerticalLines(true);
 		JScrollPane scroll = new JScrollPane();
 		scroll.setBounds(10, 30, 445, 210);
 		scroll.setViewportView(tabela);
@@ -89,4 +107,58 @@ public class SelecionarPesquisasSalvas extends JDialog {
 
 	}
 
+	@SuppressWarnings("rawtypes")
+	private void buscaArquivos() {
+		JFileChooser fc = new JFileChooser();
+
+		// restringe a amostra a diretorios apenas
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		int res = fc.showOpenDialog(null);
+
+		if(res == JFileChooser.APPROVE_OPTION){
+			File diretorio = fc.getSelectedFile();
+
+			File[] files = diretorio.listFiles();
+
+			for (int i = 0; i < files.length; i++) {
+				File arq = files[i];
+				if (arq.exists() && arq.getName().contains(".pesquisa")) {
+					try {
+
+						FileInputStream fin = new FileInputStream(arq.getAbsolutePath());
+						ObjectInputStream ois = new ObjectInputStream(fin);
+						pesquisas.put(arq, (ArrayList) ois.readObject());
+						fin.close();
+						ois.close();
+
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(null, "Não foi possível carregar o arquivo " + arq.getName() + "!", "Atenção", JOptionPane.ERROR_MESSAGE);
+					}	
+				}
+			}
+
+			this.carregaGrid();
+
+		}else
+			JOptionPane.showMessageDialog(null, "Não foi possível localizar o caminho escolhido!", "Atenção", JOptionPane.ERROR_MESSAGE);
+	}
+
+	private void carregaGrid(){
+		DefaultTableModel tabelaModelo = new DefaultTableModel(null, new String[] { "Nome", "Caminho" });
+		this.tabela.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+		if(this.pesquisas != null && this.pesquisas.size() > 0){
+			int qtd = 0;
+			
+			for (File file : this.pesquisas.keySet()) {		
+				tabelaModelo.addRow(new String[] { "Nome", "Caminho" });
+				tabelaModelo.setValueAt(file.getName().replace(".pesquisa", ""), qtd, 0);
+				tabelaModelo.setValueAt(file.getAbsolutePath(), qtd, 1);
+				qtd++;
+			}
+		}
+
+		this.tabela.setModel(tabelaModelo);
+		this.tabela.setCursor(Cursor.getDefaultCursor());
+	}
 }
