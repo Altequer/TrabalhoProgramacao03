@@ -1,6 +1,9 @@
 package adapters;
 
-public class Cd {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Cd implements Serializable {
 	private String nome, genero, album, artista;
 	public String getArtista() {
 		return artista;

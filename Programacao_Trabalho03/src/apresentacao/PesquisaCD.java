@@ -6,9 +6,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -31,8 +36,9 @@ public class PesquisaCD extends JFrame {
 	private JButton btSelecionar;
 	private JButton btSalvar;
 	private JTable tabela;
+	private String Palavrapesquisa = "";
 	private ArrayList<Cd> listaCdEscolhido = null;
-	
+
 	public PesquisaCD() {
 		this.configuraForm();
 	}
@@ -69,12 +75,12 @@ public class PesquisaCD extends JFrame {
 		fildNomeArqSel.setBounds(75, 25, 432, 25);
 		fildNomeArqSel.addKeyListener(new KeyAdapter() {
 
-		    @Override
-		    public void keyTyped(KeyEvent e) {
-		        if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-		           pesquisar();
-		        }
-		    }
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (e.getKeyChar() == KeyEvent.VK_ENTER) {
+					pesquisar();
+				}
+			}
 		});
 		this.add(fildNomeArqSel);
 	}
@@ -90,9 +96,8 @@ public class PesquisaCD extends JFrame {
 			}
 		});
 		this.add(btPesquisar);
-		
+
 		//Adiciona o botão de Selecionar pesquisa
-		
 		btSelecionar = new JButton("Selecionar pesquisa");
 		btSelecionar.setBounds(356, 313, 150, 24);
 		btSelecionar.addActionListener(new ActionListener() {			
@@ -104,19 +109,23 @@ public class PesquisaCD extends JFrame {
 			}
 		});
 		this.add(btSelecionar);
-		
+
 		//Adiciona o botão de Salvar
 		btSalvar = new JButton("Salvar");
 		btSalvar.setBounds(509, 313, 145, 24);
 		btSalvar.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {				 
-
+				if(getListaCdEscolhido() == null || getListaCdEscolhido().size() == 0){
+					JOptionPane.showMessageDialog(null, "Lista vazia!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+				}else{
+					salvar();
+				}
 			}
 		});
 		this.add(btSalvar);
 	}
-	
+
 	private void addGrid(){
 		tabela = new JTable();
 		DefaultTableModel model = new DefaultTableModel(null, new String[]{"Nome", "Álbum", "Gênero", "Valor"});
@@ -140,13 +149,13 @@ public class PesquisaCD extends JFrame {
 	private void setListaCdEscolhido(ArrayList<Cd> listaCdEscolhido) {
 		this.listaCdEscolhido = listaCdEscolhido;
 	}
-	
+
 	private void AddLista(ArrayList<Cd> lista){
 		if(lista != null){
 			this.setListaCdEscolhido(lista);
 		}
 	}
-	
+
 	private void carregaGrid(){
 		DefaultTableModel tabelaModelo = new DefaultTableModel(null, new String[] { "Nome", "Álbum", "Gênero", "Valor" });
 		this.tabela.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -165,16 +174,48 @@ public class PesquisaCD extends JFrame {
 		this.tabela.setModel(tabelaModelo);
 		this.tabela.setCursor(Cursor.getDefaultCursor());
 	}
-	
+
 	public void pesquisar(){
 		this.setListaCdEscolhido(new ArrayList<>());
-		this.AddLista(new SubmarinoProductsAdapter().procurar(fildNomeArqSel.getText().trim(), getListaCdEscolhido()));
-		this.AddLista(new SomLivreServidorAdapter().procurar(fildNomeArqSel.getText().trim(), getListaCdEscolhido())); 
-		
+		this.Palavrapesquisa = this.fildNomeArqSel.getText().trim();
+		this.AddLista(new SubmarinoProductsAdapter().procurar(this.Palavrapesquisa, getListaCdEscolhido()));
+		this.AddLista(new SomLivreServidorAdapter().procurar(this.Palavrapesquisa, getListaCdEscolhido())); 
+
 		if(this.getListaCdEscolhido().size() == 0){
 			JOptionPane.showMessageDialog(null, "Não foi possível localizar nenhuma informação com este filtro!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
 		}
 		this.carregaGrid();
 	}
 
+	public void salvar(){
+		JFileChooser fc = new JFileChooser();
+
+		// restringe a amostra a diretorios apenas
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		int res = fc.showOpenDialog(null);
+
+		if(res == JFileChooser.APPROVE_OPTION){
+
+			try {
+
+				File arquivo = new File(fc.getSelectedFile() + "\\" + (this.Palavrapesquisa.isEmpty() ? "Todos" : this.Palavrapesquisa) + ".pesquisa");
+
+				if(!arquivo.exists() || JOptionPane.showConfirmDialog(null, "O arquivo já existe!!\n\rDeseja substituir?", "Atenção", JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION){
+					FileOutputStream fout = new FileOutputStream(arquivo.getAbsolutePath());
+					ObjectOutputStream object = new ObjectOutputStream(fout);
+					object.writeObject(this.getListaCdEscolhido());
+					fout.close();
+					object.close();
+				}
+
+				JOptionPane.showMessageDialog(null, "Salvo com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+			} catch (IOException e) {
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Não foi possível salvar arquivo!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+			}
+
+		}
+		else
+			JOptionPane.showMessageDialog(null, "Não foi possível localizar o caminho escolhido!", "Atenção", JOptionPane.ERROR_MESSAGE);
+	}
 }
