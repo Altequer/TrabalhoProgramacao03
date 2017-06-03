@@ -173,7 +173,6 @@ public class SelecionarPesquisasSalvas extends JDialog {
 
 		if(linhaSelecionada > -1 && this.pesquisas != null && this.pesquisas.size() > 0){
 			return (ArrayList<Cd>) this.tabela.getModel().getValueAt(linhaSelecionada, 2);
-//			return (ArrayList<Cd>) this.tabela.getValueAt(linhaSelecionada, 2);
 		}
 		return null;
 	}
