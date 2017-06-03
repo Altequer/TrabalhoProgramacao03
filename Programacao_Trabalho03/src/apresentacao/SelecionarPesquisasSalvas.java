@@ -71,7 +71,7 @@ public class SelecionarPesquisasSalvas extends JDialog {
 
 	private void addGrid() {
 		tabela = new JTable();
-		DefaultTableModel model = new DefaultTableModel(new String[]{"Nome", "Caminho"}, 0);
+		DefaultTableModel model = new DefaultTableModel(new String[]{"Nome", "Caminho" }, 0);
 		tabela.setModel(model);
 		tabela.setDefaultEditor(Object.class, null);
 		tabela.getTableHeader().setReorderingAllowed(false);
@@ -148,34 +148,32 @@ public class SelecionarPesquisasSalvas extends JDialog {
 	}
 
 	private void carregaGrid(){
-		DefaultTableModel tabelaModelo = new DefaultTableModel(null, new String[] { "Nome", "Caminho" });
+		DefaultTableModel tabelaModelo = new DefaultTableModel(null, new String[] { "Nome", "Caminho" , "Listas"});
 		this.tabela.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
 		if(this.pesquisas != null && this.pesquisas.size() > 0){
 			int qtd = 0;
-			
+
 			for (File file : this.pesquisas.keySet()) {		
-				tabelaModelo.addRow(new String[] { "Nome", "Caminho" });
+				tabelaModelo.addRow(new String[] { "Nome", "Caminho" ,  "Listas"});
 				tabelaModelo.setValueAt(file.getName().replace(".pesquisa", ""), qtd, 0);
 				tabelaModelo.setValueAt(file.getAbsolutePath(), qtd, 1);
+				tabelaModelo.setValueAt(this.pesquisas.get(file), qtd, 2);
 				qtd++;
 			}
 		}
-
 		this.tabela.setModel(tabelaModelo);
+		this.tabela.getColumnModel().removeColumn(this.tabela.getColumnModel().getColumn(2));
 		this.tabela.setCursor(Cursor.getDefaultCursor());
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public ArrayList<Cd> getPesquisas() {
 		int linhaSelecionada = this.tabela.getSelectedRow();
 
 		if(linhaSelecionada > -1 && this.pesquisas != null && this.pesquisas.size() > 0){
-			for (File file : this.pesquisas.keySet()) {	
-				if(this.tabela.getValueAt(linhaSelecionada, 1) == file.getAbsolutePath()){
-					return this.pesquisas.get(file);
-				}
-			}
+			return (ArrayList<Cd>) this.tabela.getModel().getValueAt(linhaSelecionada, 2);
+//			return (ArrayList<Cd>) this.tabela.getValueAt(linhaSelecionada, 2);
 		}
 		return null;
 	}
