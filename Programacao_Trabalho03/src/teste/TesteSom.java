@@ -21,7 +21,7 @@ public class TesteSom {
 		
 		SomLivreServidorAdapter adpter = new SomLivreServidorAdapter();
 		
-		ArrayList<Cd> listaAux = adpter.procurar("p");
+		ArrayList<Cd> listaAux = adpter.procurar("pitty");
 		
 		for (int i = 0; i < listaAux.size(); i++) {
 			System.out.println(listaAux.get(i).toString());

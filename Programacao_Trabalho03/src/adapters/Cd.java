@@ -35,7 +35,7 @@ public class Cd {
 	
 	public boolean comparar(String palavra) {
 		
-		if(this.getNome().toLowerCase().contains(palavra) || this.getAlbum().toLowerCase().contains(palavra) || this.getGenero().toLowerCase().contains(palavra)){
+		if(this.getNome().toLowerCase().contains(palavra) || this.getAlbum().toLowerCase().contains(palavra) || this.getGenero().toLowerCase().contains(palavra) || this.getArtista().toLowerCase().contains(palavra)){
 			return true;
 		}
 		
