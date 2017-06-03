@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -72,9 +73,14 @@ public class PesquisaCD extends JFrame {
 		btPesquisar.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {				 
+				
 				setListaCdEscolhido(new ArrayList<>());
-				setListaCdEscolhido(new SubmarinoProductsAdapter().procurar(fildNomeArqSel.getText().trim(), getListaCdEscolhido()));
-				setListaCdEscolhido(new SomLivreServidorAdapter().procurar(fildNomeArqSel.getText().trim(), getListaCdEscolhido())); 
+				AddLista(new SubmarinoProductsAdapter().procurar(fildNomeArqSel.getText().trim(), getListaCdEscolhido()));
+				AddLista(new SomLivreServidorAdapter().procurar(fildNomeArqSel.getText().trim(), getListaCdEscolhido())); 
+				
+				if(getListaCdEscolhido().size() == 0){
+					JOptionPane.showMessageDialog(null, "Não foi possível localizar nenhuma informação com este filtro!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
 		});
 		this.add(btPesquisar);
@@ -123,6 +129,12 @@ public class PesquisaCD extends JFrame {
 
 	public void setListaCdEscolhido(ArrayList<Cd> listaCdEscolhido) {
 		this.listaCdEscolhido = listaCdEscolhido;
+	}
+	
+	public void AddLista(ArrayList<Cd> lista){
+		if(lista != null){
+			this.setListaCdEscolhido(lista);
+		}
 	}
 
 }

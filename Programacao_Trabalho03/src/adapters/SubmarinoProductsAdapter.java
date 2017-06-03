@@ -53,6 +53,7 @@ public class  SubmarinoProductsAdapter extends AdapterGenerico{
 
 	@Override
 	public boolean deconectar() {
+		this.subMarino.disconnect();
 		this.subMarino = null;
 
 		return true;
