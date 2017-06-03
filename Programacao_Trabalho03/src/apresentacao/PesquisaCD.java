@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -65,6 +67,15 @@ public class PesquisaCD extends JFrame {
 	private void addTextFild() {
 		fildNomeArqSel = new JTextField();
 		fildNomeArqSel.setBounds(75, 25, 432, 25);
+		fildNomeArqSel.addKeyListener(new KeyAdapter() {
+
+		    @Override
+		    public void keyTyped(KeyEvent e) {
+		        if (e.getKeyChar() == KeyEvent.VK_ENTER) {
+		           pesquisar();
+		        }
+		    }
+		});
 		this.add(fildNomeArqSel);
 	}
 
@@ -75,15 +86,7 @@ public class PesquisaCD extends JFrame {
 		btPesquisar.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {				 
-				
-				setListaCdEscolhido(new ArrayList<>());
-				AddLista(new SubmarinoProductsAdapter().procurar(fildNomeArqSel.getText().trim(), getListaCdEscolhido()));
-				AddLista(new SomLivreServidorAdapter().procurar(fildNomeArqSel.getText().trim(), getListaCdEscolhido())); 
-				
-				if(getListaCdEscolhido().size() == 0){
-					JOptionPane.showMessageDialog(null, "Não foi possível localizar nenhuma informação com este filtro!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
-				}
-				carregaGrid();
+				pesquisar();
 			}
 		});
 		this.add(btPesquisar);
@@ -134,17 +137,17 @@ public class PesquisaCD extends JFrame {
 		return listaCdEscolhido;
 	}
 
-	public void setListaCdEscolhido(ArrayList<Cd> listaCdEscolhido) {
+	private void setListaCdEscolhido(ArrayList<Cd> listaCdEscolhido) {
 		this.listaCdEscolhido = listaCdEscolhido;
 	}
 	
-	public void AddLista(ArrayList<Cd> lista){
+	private void AddLista(ArrayList<Cd> lista){
 		if(lista != null){
 			this.setListaCdEscolhido(lista);
 		}
 	}
 	
-	public void carregaGrid(){
+	private void carregaGrid(){
 		DefaultTableModel tabelaModelo = new DefaultTableModel(null, new String[] { "Nome", "Álbum", "Gênero", "Valor" });
 		this.tabela.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
@@ -161,6 +164,17 @@ public class PesquisaCD extends JFrame {
 
 		this.tabela.setModel(tabelaModelo);
 		this.tabela.setCursor(Cursor.getDefaultCursor());
+	}
+	
+	public void pesquisar(){
+		this.setListaCdEscolhido(new ArrayList<>());
+		this.AddLista(new SubmarinoProductsAdapter().procurar(fildNomeArqSel.getText().trim(), getListaCdEscolhido()));
+		this.AddLista(new SomLivreServidorAdapter().procurar(fildNomeArqSel.getText().trim(), getListaCdEscolhido())); 
+		
+		if(this.getListaCdEscolhido().size() == 0){
+			JOptionPane.showMessageDialog(null, "Não foi possível localizar nenhuma informação com este filtro!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+		}
+		this.carregaGrid();
 	}
 
 }
