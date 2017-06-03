@@ -4,7 +4,7 @@ import org.omg.PortableServer.POAPackage.ServantNotActive;
 
 import didatico.SubmarinoProducts;
 
-public class Teste {
+public class TesteSubmarino {
 
 	public static void main(String[] args) {
 
