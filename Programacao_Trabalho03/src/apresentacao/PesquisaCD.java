@@ -73,9 +73,8 @@ public class PesquisaCD extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {				 
 				setListaCdEscolhido(new ArrayList<>());
-				new SubmarinoProductsAdapter(getListaCdEscolhido());
-				new SomLivreServidorAdapter(getListaCdEscolhido()); 
-				
+				setListaCdEscolhido(new SubmarinoProductsAdapter().procurar(fildNomeArqSel.getText().trim(), getListaCdEscolhido()));
+				setListaCdEscolhido(new SomLivreServidorAdapter().procurar(fildNomeArqSel.getText().trim(), getListaCdEscolhido())); 
 			}
 		});
 		this.add(btPesquisar);

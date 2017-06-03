@@ -6,20 +6,21 @@ public abstract class AdapterGenerico {
 
 	private ArrayList<Cd> listaCds = null;
 
+	public AdapterGenerico() {
+		this.setListaCds(new ArrayList<>());
+	}
+
 	public void AddLista(Cd cd) {
 		this.listaCds.add(cd);
 	}
 
-	public ArrayList<Cd> procurar(String palavra) {
-		ArrayList<Cd> listaRetorno = new ArrayList<>();
-
+	public ArrayList<Cd> procurar(String palavra, ArrayList<Cd> listaPreencher) {
 		for (int i = 0; i < this.listaCds.size(); i++) {
 			if (this.listaCds.get(i).comparar(palavra)) {
-				listaRetorno.add(this.listaCds.get(i));
+				listaPreencher.add(this.listaCds.get(i));
 			}
 		}
-
-		return listaRetorno;
+		return listaPreencher;
 	}
 	
 	public ArrayList<Cd> getListaCds() {

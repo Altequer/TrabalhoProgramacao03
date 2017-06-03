@@ -1,7 +1,5 @@
 package adapters;
 
-import java.util.ArrayList;
-
 import javax.swing.JOptionPane;
 
 import org.omg.PortableServer.POAPackage.ServantNotActive;
@@ -10,8 +8,7 @@ import didatico.SubmarinoProducts;
 public class  SubmarinoProductsAdapter extends AdapterGenerico{
 	SubmarinoProducts subMarino = null;
 
-	public SubmarinoProductsAdapter(ArrayList<Cd> lista) {
-		this.setListaCds(lista);
+	public SubmarinoProductsAdapter() {
 		this.carregarLista();
 	}
 

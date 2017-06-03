@@ -1,16 +1,12 @@
 package adapters;
 
-import java.util.ArrayList;
-
 import javax.swing.JOptionPane;
-
 import conexao.SomLivreServidor;
 
 public class SomLivreServidorAdapter extends AdapterGenerico {
 	SomLivreServidor somServidor = null;
 
-	public SomLivreServidorAdapter(ArrayList<Cd> lista) {
-		this.setListaCds(lista);
+	public SomLivreServidorAdapter() {
 		this.carregarLista();
 	}
 
