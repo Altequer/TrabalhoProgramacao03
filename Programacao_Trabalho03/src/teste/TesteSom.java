@@ -19,7 +19,7 @@ public class TesteSom {
 		//	System.out.println(retorno[i]);
 		}
 		
-		SomLivreServidorAdapter adpter = new SomLivreServidorAdapter();
+		SomLivreServidorAdapter adpter = new SomLivreServidorAdapter( new ArrayList<>());
 		
 		ArrayList<Cd> listaAux = adpter.procurar("pitty");
 		

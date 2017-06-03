@@ -1,5 +1,7 @@
 package teste;
 
+import java.util.ArrayList;
+
 import org.omg.PortableServer.POAPackage.ServantNotActive;
 
 import adapters.SubmarinoProductsAdapter;
@@ -9,7 +11,7 @@ public class TesteSubmarino {
 
 	public static void main(String[] args) {
 
-		SubmarinoProductsAdapter adapter = new SubmarinoProductsAdapter();
+		SubmarinoProductsAdapter adapter = new SubmarinoProductsAdapter(new ArrayList<>());
 		
 		for (int i = 0; i < adapter.getListaCds().size(); i++) {
 			System.out.println(adapter.getListaCds().get(i).toString());

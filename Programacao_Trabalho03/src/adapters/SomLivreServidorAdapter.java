@@ -1,11 +1,16 @@
 package adapters;
 
+import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
 import conexao.SomLivreServidor;
 
 public class SomLivreServidorAdapter extends AdapterGenerico {
 	SomLivreServidor somServidor = null;
 
-	public SomLivreServidorAdapter() {
+	public SomLivreServidorAdapter(ArrayList<Cd> lista) {
+		this.setListaCds(lista);
 		this.carregarLista();
 	}
 
@@ -20,7 +25,7 @@ public class SomLivreServidorAdapter extends AdapterGenerico {
 				this.AddLista(new Cd(infos[0], "", "", infos[1], Float.parseFloat(infos[2].trim())));
 			}
 		}else{
-			System.out.println("Verificar conexão!");
+			JOptionPane.showMessageDialog(null, "Verificar conexão!", "Atenção", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -32,7 +37,7 @@ public class SomLivreServidorAdapter extends AdapterGenerico {
 			this.somServidor.registrar("Connectar");
 
 		} catch (Exception e) {
-			System.out.println("Erro ao tentar fazer conexão");
+			JOptionPane.showMessageDialog(null, "Erro ao tentar fazer conexão", "Atenção", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 

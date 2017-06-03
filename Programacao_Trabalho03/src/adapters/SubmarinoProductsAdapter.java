@@ -1,12 +1,17 @@
 package adapters;
 
+import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
 import org.omg.PortableServer.POAPackage.ServantNotActive;
 import didatico.SubmarinoProducts;
 
 public class  SubmarinoProductsAdapter extends AdapterGenerico{
 	SubmarinoProducts subMarino = null;
 
-	public SubmarinoProductsAdapter() {
+	public SubmarinoProductsAdapter(ArrayList<Cd> lista) {
+		this.setListaCds(lista);
 		this.carregarLista();
 	}
 
@@ -22,10 +27,10 @@ public class  SubmarinoProductsAdapter extends AdapterGenerico{
 				}
 				
 			} catch (ServantNotActive e) {
-				System.out.println("Não foi possível carregar lista!");
+				JOptionPane.showMessageDialog(null, "Não foi possível carregar lista!", "Atenção", JOptionPane.ERROR_MESSAGE);
 			}
 		}else{
-			System.out.println("Verificar conexão!");
+			JOptionPane.showMessageDialog(null, "Verificar conexão!", "Atenção", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -37,7 +42,7 @@ public class  SubmarinoProductsAdapter extends AdapterGenerico{
 			this.subMarino.connect("furb", "furb");
 
 		} catch (Exception e) {
-			System.out.println("Erro ao tentar fazer conexão");
+			JOptionPane.showMessageDialog(null, "Erro ao tentar fazer conexão", "Atenção", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 

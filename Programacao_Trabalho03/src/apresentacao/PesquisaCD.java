@@ -3,6 +3,7 @@ package apresentacao;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,6 +12,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import adapters.Cd;
+import adapters.SomLivreServidorAdapter;
+import adapters.SubmarinoProductsAdapter;
 
 public class PesquisaCD extends JFrame {
 
@@ -21,7 +26,8 @@ public class PesquisaCD extends JFrame {
 	private JButton btSelecionar;
 	private JButton btSalvar;
 	private JTable tabela;
-
+	private ArrayList<Cd> listaCdEscolhido = null;
+	
 	public PesquisaCD() {
 		this.configuraForm();
 	}
@@ -66,7 +72,10 @@ public class PesquisaCD extends JFrame {
 		btPesquisar.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {				 
-
+				setListaCdEscolhido(new ArrayList<>());
+				new SubmarinoProductsAdapter(getListaCdEscolhido());
+				new SomLivreServidorAdapter(getListaCdEscolhido()); 
+				
 			}
 		});
 		this.add(btPesquisar);
@@ -109,5 +118,12 @@ public class PesquisaCD extends JFrame {
 		this.add(scroll);
 	}
 
+	public ArrayList<Cd> getListaCdEscolhido() {
+		return listaCdEscolhido;
+	}
+
+	public void setListaCdEscolhido(ArrayList<Cd> listaCdEscolhido) {
+		this.listaCdEscolhido = listaCdEscolhido;
+	}
 
 }
