@@ -25,9 +25,7 @@ public class SelecionarPesquisasSalvas extends JDialog {
 	}
 
 	private void configuraForm(){
-		this.setModal(true);
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		this.setVisible(true);
 		this.setSize(470, 300);
 		this.getContentPane().setBackground(Color.WHITE);
 		this.setTitle("Pesquisa salvas");
@@ -44,6 +42,8 @@ public class SelecionarPesquisasSalvas extends JDialog {
 
 		// Repinta os componentes na tela
 		this.repaint();
+		this.setModal(true);
+		this.setVisible(true);
 	}
 
 	private void addLabel() {

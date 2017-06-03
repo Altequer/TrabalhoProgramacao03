@@ -1,7 +1,6 @@
 package teste;
 
 import apresentacao.PesquisaCD;
-import apresentacao.SelecionarPesquisasSalvas;
 
 public class TesteTela {
 	
