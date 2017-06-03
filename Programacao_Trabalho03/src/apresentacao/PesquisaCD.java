@@ -1,6 +1,7 @@
 package apresentacao;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import adapters.Cd;
@@ -81,6 +83,7 @@ public class PesquisaCD extends JFrame {
 				if(getListaCdEscolhido().size() == 0){
 					JOptionPane.showMessageDialog(null, "Não foi possível localizar nenhuma informação com este filtro!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
 				}
+				carregaGrid();
 			}
 		});
 		this.add(btPesquisar);
@@ -112,11 +115,15 @@ public class PesquisaCD extends JFrame {
 	}
 	
 	private void addGrid(){
-		String[] coluna = new String[]{"Nome", "Álbum", "Gênero", "Valor"};
-		
 		tabela = new JTable();
-		DefaultTableModel model = new DefaultTableModel(coluna, 0);
+		DefaultTableModel model = new DefaultTableModel(null, new String[]{"Nome", "Álbum", "Gênero", "Valor"});
 		tabela.setModel(model);
+		tabela.setDefaultEditor(Object.class, null);
+		tabela.getTableHeader().setReorderingAllowed(false);
+		tabela.getTableHeader().setResizingAllowed(true);
+		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tabela.setShowHorizontalLines(true);
+		tabela.setShowVerticalLines(true);
 		JScrollPane scroll = new JScrollPane();
 		scroll.setBounds(10, 60, 645, 250);
 		scroll.setViewportView(tabela);
@@ -135,6 +142,25 @@ public class PesquisaCD extends JFrame {
 		if(lista != null){
 			this.setListaCdEscolhido(lista);
 		}
+	}
+	
+	public void carregaGrid(){
+		DefaultTableModel tabelaModelo = new DefaultTableModel(null, new String[] { "Nome", "Álbum", "Gênero", "Valor" });
+		this.tabela.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+
+		if(this.listaCdEscolhido != null){
+			for (int i = 0; i < this.listaCdEscolhido.size(); i++) {
+				tabelaModelo.addRow(new String[] { "Nome", "Álbum", "Gênero", "Valor" });
+				tabelaModelo.setValueAt(listaCdEscolhido.get(i).getNome(), i, 0);
+				tabelaModelo.setValueAt(listaCdEscolhido.get(i).getAlbum(), i, 1);
+				tabelaModelo.setValueAt(listaCdEscolhido.get(i).getGenero(), i, 2);
+				tabelaModelo.setValueAt(listaCdEscolhido.get(i).getValor(), i, 3);
+			}
+		}
+
+		this.tabela.setModel(tabelaModelo);
+		this.tabela.setCursor(Cursor.getDefaultCursor());
 	}
 
 }
