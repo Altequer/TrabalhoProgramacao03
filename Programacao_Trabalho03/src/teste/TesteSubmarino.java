@@ -2,18 +2,17 @@ package teste;
 
 import org.omg.PortableServer.POAPackage.ServantNotActive;
 
-import adapters.SubmarinoProductsAdapter;
 import didatico.SubmarinoProducts;
 
 public class TesteSubmarino {
 
 	public static void main(String[] args) {
 
-		SubmarinoProductsAdapter adapter = new SubmarinoProductsAdapter();
+		//SubmarinoProductsAdapter adapter = new SubmarinoProductsAdapter();
 		
-		for (int i = 0; i < adapter.getListaCds().size(); i++) {
-			System.out.println(adapter.getListaCds().get(i).toString());
-		}
+		//for (int i = 0; i < adapter.getListaCds().size(); i++) {
+		//	System.out.println(adapter.getListaCds().get(i).toString());
+		//}
 		
 		SubmarinoProducts sub = SubmarinoProducts.getInstance();
 		
@@ -34,7 +33,8 @@ public class TesteSubmarino {
 			 * variavel == 3 - Valor
 			 */
 			for (int i = 0; i < sub.getCDProducts().length; i++) {
-		//		System.out.println("Produto "+sub.getCDProducts()[i][4]);
+				System.out.println("Produto "+sub.getCDProducts()[i][2]);
+				System.out.println("Cantor "+sub.getCDProducts()[i][0]);
 			}
 			
 

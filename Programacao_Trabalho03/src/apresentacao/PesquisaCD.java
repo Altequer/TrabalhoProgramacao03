@@ -159,6 +159,7 @@ public class PesquisaCD extends JFrame {
 	}
 
 	private void carregaGrid(){
+		CellRendererToolTip renderer = new CellRendererToolTip();
 		DefaultTableModel tabelaModelo = new DefaultTableModel(null, new String[] { "Nome", "Álbum", "Gênero", "Valor" });
 		this.tabela.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
@@ -170,10 +171,17 @@ public class PesquisaCD extends JFrame {
 				tabelaModelo.setValueAt(listaCdEscolhido.get(i).getAlbum(), i, 1);
 				tabelaModelo.setValueAt(listaCdEscolhido.get(i).getGenero(), i, 2);
 				tabelaModelo.setValueAt(listaCdEscolhido.get(i).getValor(), i, 3);
+				
+				renderer.addToolTip(i, "<html> <img src=\"file:" 
+				+ listaCdEscolhido.get(i).caminhoImg() 
+				+ "\" ></hmtl>");
 			}
 		}
-
 		this.tabela.setModel(tabelaModelo);
+		this.tabela.getColumnModel().getColumn(0).setCellRenderer(renderer);
+		this.tabela.getColumnModel().getColumn(1).setCellRenderer(renderer);
+		this.tabela.getColumnModel().getColumn(2).setCellRenderer(renderer);
+		this.tabela.getColumnModel().getColumn(3).setCellRenderer(renderer);
 		this.tabela.setCursor(Cursor.getDefaultCursor());
 	}
 

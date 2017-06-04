@@ -24,7 +24,7 @@ public class SomLivreServidorAdapter extends AdapterGenerico {
 			for (int i = 0; i < informacoes.length; i++) {
 
 				String[] infos = informacoes[i].replace("|", "\n").split("\n");
-				this.AddLista(new Cd(infos[0], "", "", infos[1], Float.parseFloat(infos[2].trim())));
+				this.AddLista(new Cd(infos[0], "", infos[1], "", Float.parseFloat(infos[2].trim())));
 			}
 		}else{
 			JOptionPane.showMessageDialog(null, "Verificar conexão!", "Atenção", JOptionPane.ERROR_MESSAGE);

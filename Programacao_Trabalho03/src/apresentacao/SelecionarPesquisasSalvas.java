@@ -175,6 +175,7 @@ public class SelecionarPesquisasSalvas extends JDialog {
 							ois.close();
 
 						} catch (Exception ex) {
+							ex.printStackTrace();
 							JOptionPane.showMessageDialog(null, "Não foi possível carregar o arquivo " + arq.getName() + "!", "Atenção", JOptionPane.ERROR_MESSAGE);
 						}	
 					}

@@ -26,7 +26,7 @@ public class  SubmarinoProductsAdapter extends AdapterGenerico{
 				informacoes = this.subMarino.getCDProducts();
 
 				for (int i = 0; i < informacoes.length; i++) {
-					this.AddLista(new Cd(informacoes[i][0], informacoes[i][1], informacoes[i][2], "", Float.parseFloat(informacoes[i][3].trim())));
+					this.AddLista(new Cd(informacoes[i][2], informacoes[i][1], informacoes[i][0], "", Float.parseFloat(informacoes[i][3].trim())));
 				}
 				
 			} catch (ServantNotActive e) {
