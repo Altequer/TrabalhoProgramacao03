@@ -74,7 +74,6 @@ public class PesquisaCD extends JFrame {
 		fildNomeArqSel = new JTextField();
 		fildNomeArqSel.setBounds(75, 25, 432, 25);
 		fildNomeArqSel.addKeyListener(new KeyAdapter() {
-
 			@Override
 			public void keyTyped(KeyEvent e) {
 				if (e.getKeyChar() == KeyEvent.VK_ENTER) {

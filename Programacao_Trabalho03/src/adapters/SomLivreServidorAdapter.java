@@ -9,21 +9,23 @@ public class SomLivreServidorAdapter extends AdapterGenerico {
 	SomLivreServidor somServidor = null;
 
 	public SomLivreServidorAdapter() {
+		this.conectar();
 		this.carregarLista();
+		this.deconectar();
 	}
 
 	private void carregarLista() {
-		if (this.conectar()) {
+		if (this.isConnectado()) {
+			String[] informacoes = null;
 			
 			this.setListaCds(new ArrayList<>());
-			String[] informacoes = this.somServidor.buscaCD();
-
+			informacoes = this.somServidor.buscaCD();
+			
 			for (int i = 0; i < informacoes.length; i++) {
 
 				String[] infos = informacoes[i].replace("|", "\n").split("\n");
 				this.AddLista(new Cd(infos[0], "", "", infos[1], Float.parseFloat(infos[2].trim())));
 			}
-			this.deconectar();
 		}else{
 			JOptionPane.showMessageDialog(null, "Verificar conexão!", "Atenção", JOptionPane.ERROR_MESSAGE);
 		}
@@ -37,6 +39,7 @@ public class SomLivreServidorAdapter extends AdapterGenerico {
 			this.somServidor.registrar("Connectar");
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Erro ao tentar fazer conexão", "Atenção", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
@@ -47,7 +50,6 @@ public class SomLivreServidorAdapter extends AdapterGenerico {
 	@Override
 	public boolean deconectar() {
 		this.somServidor = null;
-
 		return true;
 	}
 

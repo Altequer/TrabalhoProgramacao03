@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
@@ -17,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -25,10 +28,11 @@ import adapters.Cd;
 public class SelecionarPesquisasSalvas extends JDialog {
 
 	private static final long serialVersionUID = 1;
-	private JButton btCancelar;
-	private JButton btSelecionar;
+	private JButton btCancelar, btSelecionar, btSelecionarDiretorio;
+	private JTextField fieldDiretorio;
 	private JTable tabela;
-	private JLabel lbText;
+	private JLabel lbText, lbDiretorio;
+
 	@SuppressWarnings("rawtypes")
 	private HashMap<File, ArrayList> pesquisas = null;
 
@@ -40,7 +44,7 @@ public class SelecionarPesquisasSalvas extends JDialog {
 
 	private void configuraForm(){
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		this.setSize(470, 300);
+		this.setSize(470, 350);
 		this.getContentPane().setBackground(Color.WHITE);
 		this.setTitle("Pesquisa salvas");
 		this.setLocationRelativeTo(null);
@@ -54,8 +58,7 @@ public class SelecionarPesquisasSalvas extends JDialog {
 		addLabel();
 		addButton();
 		addGrid();
-		buscaArquivos();
-		carregaGrid();
+		addField();
 
 		// Repinta os componentes na tela
 		this.repaint();
@@ -63,10 +66,21 @@ public class SelecionarPesquisasSalvas extends JDialog {
 		this.setVisible(true);
 	}
 
+	private void addField() {
+		fieldDiretorio = new JTextField();
+		fieldDiretorio.setBounds(10, 20, 340, 24);
+		fieldDiretorio.setEnabled(false);
+		this.add(fieldDiretorio);
+	}
+
 	private void addLabel() {
 		lbText = new JLabel("Selecione a pesquisa salva:");
-		lbText.setBounds(10, 5, 200, 20);
+		lbText.setBounds(10, 48, 200, 20);
 		this.add(lbText);
+
+		lbDiretorio = new JLabel("Selecione diretório:");
+		lbDiretorio.setBounds(10, 0, 200, 20);
+		this.add(lbDiretorio);
 	}
 
 	private void addGrid() {
@@ -79,17 +93,27 @@ public class SelecionarPesquisasSalvas extends JDialog {
 		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabela.setShowHorizontalLines(true);
 		tabela.setShowVerticalLines(true);
+		tabela.addMouseListener(new MouseAdapter() {  
+		    public void mouseClicked(MouseEvent e)  
+		    {  
+		        if (e.getClickCount() == 2)  
+		        {  
+		           dispose();  
+		        }  
+		    }  
+		});  
+		
 		JScrollPane scroll = new JScrollPane();
-		scroll.setBounds(10, 30, 445, 210);
+		scroll.setBounds(10, 70, 445, 220);
 		scroll.setViewportView(tabela);
 		this.add(scroll);
 	}
 
 	private void addButton() {
-		//Adiciona o botão de Selecionar Selecionae
 
+		//Adiciona o botão de Selecionar Selecionae
 		btSelecionar = new JButton("Selecionar");
-		btSelecionar.setBounds(252, 243, 100, 24);
+		btSelecionar.setBounds(252, 293, 100, 24);
 		btSelecionar.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {	
@@ -100,15 +124,27 @@ public class SelecionarPesquisasSalvas extends JDialog {
 
 		// Adiciona o botão de Cancelar
 		btCancelar = new JButton("Cancelar");
-		btCancelar.setBounds(354, 243, 100, 24);
+		btCancelar.setBounds(354, 293, 100, 24);
 		btCancelar.addActionListener(new ActionListener() {			
 			@Override
-			public void actionPerformed(ActionEvent e) {				 
+			public void actionPerformed(ActionEvent e) {
+				pesquisas = null;
 				dispose();
 			}
 		});
 		this.add(btCancelar);
 
+		// Adiciona o botão de Selecionar diretório
+		btSelecionarDiretorio = new JButton("Selecionar");
+		btSelecionarDiretorio.setBounds(354, 20, 100, 24);
+		btSelecionarDiretorio.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {				 
+				buscaArquivos();
+				carregaGrid();
+			}
+		});
+		this.add(btSelecionarDiretorio);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -120,29 +156,35 @@ public class SelecionarPesquisasSalvas extends JDialog {
 		int res = fc.showOpenDialog(null);
 
 		if(res == JFileChooser.APPROVE_OPTION){
+
 			File diretorio = fc.getSelectedFile();
 
-			File[] files = diretorio.listFiles();
+			if(diretorio.isDirectory()){
 
-			for (int i = 0; i < files.length; i++) {
-				File arq = files[i];
-				if (arq.exists() && arq.getName().contains(".pesquisa")) {
-					try {
+				fieldDiretorio.setText(diretorio.getAbsolutePath());
+				File[] files = diretorio.listFiles();
 
-						FileInputStream fin = new FileInputStream(arq.getAbsolutePath());
-						ObjectInputStream ois = new ObjectInputStream(fin);
-						pesquisas.put(arq, (ArrayList) ois.readObject());
-						fin.close();
-						ois.close();
+				for (int i = 0; i < files.length; i++) {
+					File arq = files[i];
+					if (arq.exists() && arq.getName().contains(".pesquisa")) {
+						try {
 
-					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(null, "Não foi possível carregar o arquivo " + arq.getName() + "!", "Atenção", JOptionPane.ERROR_MESSAGE);
-					}	
+							FileInputStream fin = new FileInputStream(arq.getAbsolutePath());
+							ObjectInputStream ois = new ObjectInputStream(fin);
+							pesquisas.put(arq, (ArrayList) ois.readObject());
+							fin.close();
+							ois.close();
+
+						} catch (Exception ex) {
+							JOptionPane.showMessageDialog(null, "Não foi possível carregar o arquivo " + arq.getName() + "!", "Atenção", JOptionPane.ERROR_MESSAGE);
+						}	
+					}
 				}
+
+				this.carregaGrid();
+			}else{
+				JOptionPane.showMessageDialog(null, "O diretório escolhido é inválido!", "Atenção", JOptionPane.ERROR_MESSAGE);				
 			}
-
-			this.carregaGrid();
-
 		}else
 			JOptionPane.showMessageDialog(null, "Não foi possível localizar o caminho escolhido!", "Atenção", JOptionPane.ERROR_MESSAGE);
 	}
@@ -165,6 +207,7 @@ public class SelecionarPesquisasSalvas extends JDialog {
 		this.tabela.setModel(tabelaModelo);
 		this.tabela.getColumnModel().removeColumn(this.tabela.getColumnModel().getColumn(2));
 		this.tabela.setCursor(Cursor.getDefaultCursor());
+		
 	}
 
 	@SuppressWarnings("unchecked")

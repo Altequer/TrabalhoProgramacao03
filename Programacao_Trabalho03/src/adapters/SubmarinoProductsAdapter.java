@@ -11,11 +11,13 @@ public class  SubmarinoProductsAdapter extends AdapterGenerico{
 	SubmarinoProducts subMarino = null;
 
 	public SubmarinoProductsAdapter() {
+		this.conectar();
 		this.carregarLista();
+		this.deconectar();
 	}
 
 	private void carregarLista() {
-		if (this.conectar()) {
+		if (this.isConnectado()) {
 			
 			this.setListaCds(new ArrayList<>());
 			String[][] informacoes;
@@ -30,7 +32,6 @@ public class  SubmarinoProductsAdapter extends AdapterGenerico{
 			} catch (ServantNotActive e) {
 				JOptionPane.showMessageDialog(null, "Não foi possível carregar lista!", "Atenção", JOptionPane.ERROR_MESSAGE);
 			}
-			this.deconectar();
 		}else{
 			JOptionPane.showMessageDialog(null, "Verificar conexão!", "Atenção", JOptionPane.ERROR_MESSAGE);
 		}
