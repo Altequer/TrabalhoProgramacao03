@@ -27,7 +27,7 @@ public class Cd implements Serializable {
 	public String toString() {
 		String retorno;
 
-		retorno = ("Cd: " + this.getNome() +
+		retorno = ("Nome cd: " + this.getNome() +
 				(this.getAlbum().isEmpty() ? "" : "\n\rAlbum: " + this.getAlbum()) +
 				(this.getArtista().isEmpty() ? "" : "\n\rArtista: " + this.getArtista()) +
 				(this.getGenero().isEmpty() ? "" : "\n\rGenero: " + this.getGenero()) +

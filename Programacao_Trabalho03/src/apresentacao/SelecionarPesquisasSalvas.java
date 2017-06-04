@@ -54,7 +54,6 @@ public class SelecionarPesquisasSalvas extends JDialog {
 		this.pesquisas = new HashMap<>();
 
 		// Adiciona componentes no formulário
-
 		addLabel();
 		addButton();
 		addGrid();
@@ -190,9 +189,11 @@ public class SelecionarPesquisasSalvas extends JDialog {
 	}
 
 	private void carregaGrid(){
+		String toolltip = "Cds: ";
+		CellRendererToolTip renderer = new CellRendererToolTip(); 
 		DefaultTableModel tabelaModelo = new DefaultTableModel(null, new String[] { "Nome", "Caminho" , "Listas"});
 		this.tabela.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
+		
 		if(this.pesquisas != null && this.pesquisas.size() > 0){
 			int qtd = 0;
 
@@ -201,10 +202,18 @@ public class SelecionarPesquisasSalvas extends JDialog {
 				tabelaModelo.setValueAt(file.getName().replace(".pesquisa", ""), qtd, 0);
 				tabelaModelo.setValueAt(file.getAbsolutePath(), qtd, 1);
 				tabelaModelo.setValueAt(this.pesquisas.get(file), qtd, 2);
+				
+				for (int i = 0; i < this.pesquisas.get(file).size(); i++) {
+					toolltip += (toolltip.equals("Cds: ") ? "" : ", ") + ((Cd) this.pesquisas.get(file).get(i)).getNome();
+				}
+						
+				renderer.addToolTip(qtd, toolltip);
 				qtd++;
 			}
 		}
 		this.tabela.setModel(tabelaModelo);
+		this.tabela.getColumnModel().getColumn(0).setCellRenderer(renderer);
+		this.tabela.getColumnModel().getColumn(1).setCellRenderer(renderer);
 		this.tabela.getColumnModel().removeColumn(this.tabela.getColumnModel().getColumn(2));
 		this.tabela.setCursor(Cursor.getDefaultCursor());
 		
