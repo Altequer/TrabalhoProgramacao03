@@ -18,17 +18,17 @@ public class  SubmarinoProductsAdapter extends AdapterGenerico{
 
 	private void carregarLista() {
 		if (this.isConnectado()) {
-			
+
 			this.setListaCds(new ArrayList<>());
 			String[][] informacoes;
-			
+
 			try {
 				informacoes = this.subMarino.getCDProducts();
 
 				for (int i = 0; i < informacoes.length; i++) {
-					this.AddLista(new Cd(informacoes[i][2], informacoes[i][1], informacoes[i][0], "", Float.parseFloat(informacoes[i][3].trim())));
+					this.AddLista(new Cd(informacoes[i][2], informacoes[i][1], informacoes[i][0], "Submarino",Float.parseFloat(informacoes[i][3].trim())));
 				}
-				
+
 			} catch (ServantNotActive e) {
 				JOptionPane.showMessageDialog(null, "Não foi possível carregar lista!", "Atenção", JOptionPane.ERROR_MESSAGE);
 			}

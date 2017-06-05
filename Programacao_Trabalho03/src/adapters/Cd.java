@@ -4,32 +4,24 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class Cd implements Serializable {
-	private String nome, genero, album, artista;
-	public String getArtista() {
-		return artista;
-	}
-
-	public void setArtista(String artista) {
-		this.artista = artista;
-	}
-
+	private String album, genero, banda_artista, loja;
 	private float valor;
 
-	public Cd(String nome, String genero, String album, String artista,float valor) {
-		this.setNome(nome);
-		this.setValor(valor);
+	public Cd(String album, String genero, String banda_artista, String loja,float valor) {
 		this.setAlbum(album);
+		this.setValor(valor);
+		this.setBanda_artista(banda_artista);
 		this.setGenero(genero);
-		this.setArtista(artista);
+		this.setLoja(loja);
 	}
 
 	@Override
 	public String toString() {
 		String retorno;
 
-		retorno = ("Nome cd: " + this.getNome() +
-				(this.getAlbum().isEmpty() ? "" : "\n\rAlbum: " + this.getAlbum()) +
-				(this.getArtista().isEmpty() ? "" : "\n\rArtista: " + this.getArtista()) +
+		retorno = ("album cd: " + this.getAlbum() +
+				(this.getBanda_artista().isEmpty() ? "" : "\n\rbanda_artista: " + this.getBanda_artista()) +
+				(this.getLoja().isEmpty() ? "" : "\n\rLoja: " + this.getLoja()) +
 				(this.getGenero().isEmpty() ? "" : "\n\rGenero: " + this.getGenero()) +
 				(this.getValor() > 0 ? "" : "\n\rValor: " + this.getValor()));
 
@@ -38,7 +30,7 @@ public class Cd implements Serializable {
 
 	public boolean comparar(String palavra) {
 
-		if(palavra.isEmpty() || this.getNome().toLowerCase().contains(palavra) || this.getAlbum().toLowerCase().contains(palavra) || this.getGenero().toLowerCase().contains(palavra) || this.getArtista().toLowerCase().contains(palavra)){
+		if(palavra.isEmpty() || this.getAlbum().toLowerCase().contains(palavra) || this.getBanda_artista().toLowerCase().contains(palavra) || this.getGenero().toLowerCase().contains(palavra) || this.getLoja().toLowerCase().contains(palavra)){
 			return true;
 		}
 
@@ -46,16 +38,24 @@ public class Cd implements Serializable {
 	}
 
 
-	public String getNome() {
-		if(this.nome != null){
-			return nome;
+	public String getAlbum() {
+		if(this.album != null){
+			return album;
 		}else{
 			return "";
 		}
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setAlbum(String album) {
+		this.album = album;
+	}
+
+	public String getLoja() {
+		return loja;
+	}
+
+	public void setLoja(String loja) {
+		this.loja = loja;
 	}
 
 	public String getGenero() {
@@ -70,16 +70,16 @@ public class Cd implements Serializable {
 		this.genero = genero;
 	}
 
-	public String getAlbum() {
-		if(this.album != null){
-		return album;
+	public String getBanda_artista() {
+		if(this.banda_artista != null){
+			return banda_artista;
 		}else{
 			return "";
 		}
 	}
 
-	public void setAlbum(String album) {
-		this.album = album;
+	public void setBanda_artista(String banda_artista) {
+		this.banda_artista = banda_artista;
 	}
 
 	public float getValor() {
@@ -89,9 +89,9 @@ public class Cd implements Serializable {
 	public void setValor(float valor) {
 		this.valor = valor;
 	}
-	
+
 	public String caminhoImg(){
-		switch (this.getNome()){
+		switch (this.getAlbum()){
 		case "Admirável Chip Novo":
 			return  "./src/Imagens/1.jpg";
 		case "{Des}concerto ao Vivo":

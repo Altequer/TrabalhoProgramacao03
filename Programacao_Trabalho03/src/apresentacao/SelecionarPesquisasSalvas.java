@@ -207,7 +207,7 @@ public class SelecionarPesquisasSalvas extends JDialog {
 				tabelaModelo.setValueAt(this.pesquisas.get(file), qtd, 3);
 				
 				for (int i = 0; i < this.pesquisas.get(file).size(); i++) {
-					toolltip += (toolltip.equals("Cds: ") ? "" : ", ") + ((Cd) this.pesquisas.get(file).get(i)).getNome();
+					toolltip += (toolltip.equals("Cds: ") ? "" : ", ") + ((Cd) this.pesquisas.get(file).get(i)).getAlbum();
 				}
 						
 				renderer.addToolTip(qtd, toolltip);

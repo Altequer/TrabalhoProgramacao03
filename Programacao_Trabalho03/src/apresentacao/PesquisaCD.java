@@ -104,7 +104,7 @@ public class PesquisaCD extends JFrame {
 			public void actionPerformed(ActionEvent e) {				 
 				setVisible(false);
 				ArrayList<Cd> listaRetorno =  new SelecionarPesquisasSalvas().getPesquisas();
-				
+
 				setListaCdEscolhido(listaRetorno);
 				carregaGrid();
 				setVisible(true);			
@@ -130,7 +130,7 @@ public class PesquisaCD extends JFrame {
 
 	private void addGrid(){
 		tabela = new JTable();
-		DefaultTableModel model = new DefaultTableModel(null, new String[]{"Nome", "Álbum", "Gênero", "Valor"});
+		DefaultTableModel model = new DefaultTableModel(null, new String[]{"Álbum", "Banda/Artista", "Gênero", "Loja","Valor"});
 		tabela.setModel(model);
 		tabela.setDefaultEditor(Object.class, null);
 		tabela.getTableHeader().setReorderingAllowed(false);
@@ -160,21 +160,22 @@ public class PesquisaCD extends JFrame {
 
 	private void carregaGrid(){
 		CellRendererToolTip renderer = new CellRendererToolTip();
-		DefaultTableModel tabelaModelo = new DefaultTableModel(null, new String[] { "Nome", "Álbum", "Gênero", "Valor" });
+		DefaultTableModel tabelaModelo = new DefaultTableModel(null, new String[] { "Álbum", "Banda/Artista", "Gênero", "Loja", "Valor" });
 		this.tabela.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
 
 		if(this.listaCdEscolhido != null){
 			for (int i = 0; i < this.listaCdEscolhido.size(); i++) {
-				tabelaModelo.addRow(new String[] { "Nome", "Álbum", "Gênero", "Valor" });
-				tabelaModelo.setValueAt(listaCdEscolhido.get(i).getNome(), i, 0);
-				tabelaModelo.setValueAt(listaCdEscolhido.get(i).getAlbum(), i, 1);
+				tabelaModelo.addRow(new String[] { "Álbum", "Banda/Artista", "Gênero", "Loja", "Valor" });
+				tabelaModelo.setValueAt(listaCdEscolhido.get(i).getAlbum(), i, 0);
+				tabelaModelo.setValueAt(listaCdEscolhido.get(i).getBanda_artista(), i, 1);
 				tabelaModelo.setValueAt(listaCdEscolhido.get(i).getGenero(), i, 2);
-				tabelaModelo.setValueAt(listaCdEscolhido.get(i).getValor(), i, 3);
-				
+				tabelaModelo.setValueAt(listaCdEscolhido.get(i).getLoja(), i, 3);
+				tabelaModelo.setValueAt(listaCdEscolhido.get(i).getValor(), i, 4);
+
 				renderer.addToolTip(i, "<html> <img src=\"file:" 
-				+ listaCdEscolhido.get(i).caminhoImg() 
-				+ "\" ></hmtl>");
+						+ listaCdEscolhido.get(i).caminhoImg() 
+						+ "\" ></hmtl>");
 			}
 		}
 		this.tabela.setModel(tabelaModelo);
@@ -182,6 +183,7 @@ public class PesquisaCD extends JFrame {
 		this.tabela.getColumnModel().getColumn(1).setCellRenderer(renderer);
 		this.tabela.getColumnModel().getColumn(2).setCellRenderer(renderer);
 		this.tabela.getColumnModel().getColumn(3).setCellRenderer(renderer);
+		this.tabela.getColumnModel().getColumn(4).setCellRenderer(renderer);
 		this.tabela.setAutoCreateRowSorter(true);
 		this.tabela.setCursor(Cursor.getDefaultCursor());
 	}
