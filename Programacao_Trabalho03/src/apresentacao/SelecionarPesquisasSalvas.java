@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -84,7 +85,7 @@ public class SelecionarPesquisasSalvas extends JDialog {
 
 	private void addGrid() {
 		tabela = new JTable();
-		DefaultTableModel model = new DefaultTableModel(new String[]{"Nome", "Caminho" }, 0);
+		DefaultTableModel model = new DefaultTableModel(null, new String[]{"Nome", "Data-Hora", "Caminho"});
 		tabela.setModel(model);
 		tabela.setDefaultEditor(Object.class, null);
 		tabela.getTableHeader().setReorderingAllowed(false);
@@ -192,17 +193,18 @@ public class SelecionarPesquisasSalvas extends JDialog {
 	private void carregaGrid(){
 		String toolltip = "Cds: ";
 		CellRendererToolTip renderer = new CellRendererToolTip(); 
-		DefaultTableModel tabelaModelo = new DefaultTableModel(null, new String[] { "Nome", "Caminho" , "Listas"});
+		DefaultTableModel tabelaModelo = new DefaultTableModel(null, new String[] { "Nome", "Data-Hora", "Caminho", "Listas"});
 		this.tabela.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		
 		if(this.pesquisas != null && this.pesquisas.size() > 0){
 			int qtd = 0;
 
 			for (File file : this.pesquisas.keySet()) {		
-				tabelaModelo.addRow(new String[] { "Nome", "Caminho" ,  "Listas"});
+				tabelaModelo.addRow(new String[] { "Nome", "Data-Hora", "Caminho", "Listas"});
 				tabelaModelo.setValueAt(file.getName().replace(".pesquisa", ""), qtd, 0);
-				tabelaModelo.setValueAt(file.getAbsolutePath(), qtd, 1);
-				tabelaModelo.setValueAt(this.pesquisas.get(file), qtd, 2);
+				tabelaModelo.setValueAt(new SimpleDateFormat("dd/MM/yyyy - HH:MM:ss").format(file.lastModified()), qtd, 1);
+				tabelaModelo.setValueAt(file.getAbsolutePath(), qtd, 2);
+				tabelaModelo.setValueAt(this.pesquisas.get(file), qtd, 3);
 				
 				for (int i = 0; i < this.pesquisas.get(file).size(); i++) {
 					toolltip += (toolltip.equals("Cds: ") ? "" : ", ") + ((Cd) this.pesquisas.get(file).get(i)).getNome();
@@ -215,7 +217,8 @@ public class SelecionarPesquisasSalvas extends JDialog {
 		this.tabela.setModel(tabelaModelo);
 		this.tabela.getColumnModel().getColumn(0).setCellRenderer(renderer);
 		this.tabela.getColumnModel().getColumn(1).setCellRenderer(renderer);
-		this.tabela.getColumnModel().removeColumn(this.tabela.getColumnModel().getColumn(2));
+		this.tabela.getColumnModel().getColumn(2).setCellRenderer(renderer);
+		this.tabela.getColumnModel().removeColumn(this.tabela.getColumnModel().getColumn(3));
 		this.tabela.setAutoCreateRowSorter(true);
 		this.tabela.setCursor(Cursor.getDefaultCursor());
 		
