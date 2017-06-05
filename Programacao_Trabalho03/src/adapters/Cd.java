@@ -3,7 +3,7 @@ package adapters;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class Cd implements Serializable {
+public class Cd implements Serializable, Comparable<Cd> {
 	private String album, genero, banda_artista, loja;
 	private float valor;
 
@@ -136,5 +136,10 @@ public class Cd implements Serializable {
 			return "./src/Imagens/21.jpg";
 		}
 		return "";
+	}
+	
+	@Override
+	public int compareTo(Cd outro) {
+		return new Float(this.getValor()).compareTo(outro.getValor());
 	}
 }

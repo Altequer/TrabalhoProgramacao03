@@ -163,7 +163,6 @@ public class PesquisaCD extends JFrame {
 		DefaultTableModel tabelaModelo = new DefaultTableModel(null, new String[] { "Álbum", "Banda/Artista", "Gênero", "Loja", "Valor" });
 		this.tabela.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-
 		if(this.listaCdEscolhido != null){
 			for (int i = 0; i < this.listaCdEscolhido.size(); i++) {
 				tabelaModelo.addRow(new String[] { "Álbum", "Banda/Artista", "Gênero", "Loja", "Valor" });
@@ -184,7 +183,6 @@ public class PesquisaCD extends JFrame {
 		this.tabela.getColumnModel().getColumn(2).setCellRenderer(renderer);
 		this.tabela.getColumnModel().getColumn(3).setCellRenderer(renderer);
 		this.tabela.getColumnModel().getColumn(4).setCellRenderer(renderer);
-		this.tabela.setAutoCreateRowSorter(true);
 		this.tabela.setCursor(Cursor.getDefaultCursor());
 	}
 
