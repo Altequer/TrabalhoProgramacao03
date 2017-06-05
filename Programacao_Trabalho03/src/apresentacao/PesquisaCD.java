@@ -182,6 +182,7 @@ public class PesquisaCD extends JFrame {
 		this.tabela.getColumnModel().getColumn(1).setCellRenderer(renderer);
 		this.tabela.getColumnModel().getColumn(2).setCellRenderer(renderer);
 		this.tabela.getColumnModel().getColumn(3).setCellRenderer(renderer);
+		this.tabela.setAutoCreateRowSorter(true);
 		this.tabela.setCursor(Cursor.getDefaultCursor());
 	}
 

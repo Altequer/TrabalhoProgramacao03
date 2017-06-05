@@ -216,6 +216,7 @@ public class SelecionarPesquisasSalvas extends JDialog {
 		this.tabela.getColumnModel().getColumn(0).setCellRenderer(renderer);
 		this.tabela.getColumnModel().getColumn(1).setCellRenderer(renderer);
 		this.tabela.getColumnModel().removeColumn(this.tabela.getColumnModel().getColumn(2));
+		this.tabela.setAutoCreateRowSorter(true);
 		this.tabela.setCursor(Cursor.getDefaultCursor());
 		
 	}
