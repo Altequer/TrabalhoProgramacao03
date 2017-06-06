@@ -6,26 +6,22 @@ public class CdComparador {
 	public static Comparator<Cd> VALOR_ALBUM = new Comparator<Cd>() {
         @Override
         public int compare(Cd o1, Cd o2) {
-        	if (o1.getAlbum() == o2.getAlbum()) {
+        	int comparacao = o1.getAlbum().compareTo(o2.getAlbum());
+        	
+        	if (comparacao == 0) {
         		return o1.compareTo(o2);
         	}
-//        	if (o1.getAlbum() > o2.getAlbum()) {
-//        		return 1;
-//        	} else {
-//        		return -1;
-//        	} 
-        	return -1;
+        	return comparacao;
         }
     };
+    
     public static Comparator<Cd> VALOR_BANDA_ARTISTA = new Comparator<Cd>() {
         @Override
         public int compare(Cd o1, Cd o2) {
-        	int modelComparation = o1.getBanda_artista().compareTo(o2.getBanda_artista());
-        	if (modelComparation == 0) {
-        		
+        	if (o1.getBanda_artista().equalsIgnoreCase(o2.getBanda_artista())) {
+        		return o1.compareTo(o2);
         	}
-        	return modelComparation;
-
+        	return o1.getBanda_artista().compareTo(o2.getBanda_artista());
         }
     };
 }
