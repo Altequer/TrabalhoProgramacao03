@@ -153,9 +153,23 @@ public class PesquisaCD extends JFrame {
 
 					switch (col) {
 					case 0:
-						Collections.sort(listaCdEscolhido, CdComparador.VALOR_ALBUM);
+						if (controleOrdem) {
+							Collections.sort(listaCdEscolhido, CdComparador.VALOR_ALBUM);
+							controleOrdem = false;
+						} else {
+							Collections.reverse(listaCdEscolhido);
+							controleOrdem = true;
+						}
+						break;
 					case 1:
-						Collections.sort(listaCdEscolhido, CdComparador.VALOR_BANDA_ARTISTA);
+						if (controleOrdem) {
+							Collections.sort(listaCdEscolhido, CdComparador.VALOR_BANDA_ARTISTA);
+							controleOrdem = false;
+						} else {
+							Collections.reverse(listaCdEscolhido);
+							controleOrdem = true;
+						}
+						break;
 					case 4:
 						if (controleOrdem) {
 							Collections.sort(listaCdEscolhido);
@@ -164,6 +178,7 @@ public class PesquisaCD extends JFrame {
 							Collections.reverse(listaCdEscolhido);
 							controleOrdem = true;
 						}
+						break;
 					}
 					carregaGrid();
 				}
