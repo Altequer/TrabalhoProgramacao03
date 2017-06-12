@@ -8,15 +8,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -26,10 +21,9 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-import adapters.Cd;
-import adapters.CdComparador;
-import adapters.SomLivreServidorAdapter;
-import adapters.SubmarinoProductsAdapter;
+import controle.Cd;
+import controle.CdComparador;
+import controle.PesquisaPrecoFacade;
 
 public class PesquisaCD extends JFrame {
 
@@ -42,9 +36,11 @@ public class PesquisaCD extends JFrame {
 	private JTable tabela;
 	private String Palavrapesquisa = "";
 	private ArrayList<Cd> listaCdEscolhido = null;
+	private PesquisaPrecoFacade pesquisaPrecoFacade;
 	boolean controleOrdem = true;
 
 	public PesquisaCD() {
+		pesquisaPrecoFacade = PesquisaPrecoFacade.getInstaciaFacade();
 		this.configuraForm();
 	}
 
@@ -64,6 +60,8 @@ public class PesquisaCD extends JFrame {
 		addButton();
 		addTextFild();
 		addGrid();
+		
+		this.fildNomeArqSel.requestFocus();
 
 		// Repinta os componentes na tela
 		this.repaint();
@@ -126,7 +124,7 @@ public class PesquisaCD extends JFrame {
 				if (getListaCdEscolhido() == null || getListaCdEscolhido().size() == 0) {
 					JOptionPane.showMessageDialog(null, "Lista vazia!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
 				} else {
-					salvar();
+					pesquisaPrecoFacade.salvar();
 				}
 			}
 		});
@@ -196,12 +194,8 @@ public class PesquisaCD extends JFrame {
 	}
 
 	private void setListaCdEscolhido(ArrayList<Cd> listaCdEscolhido) {
-		this.listaCdEscolhido = listaCdEscolhido;
-	}
-
-	private void AddLista(ArrayList<Cd> lista) {
-		if (lista != null) {
-			this.setListaCdEscolhido(lista);
+		if(listaCdEscolhido != null){
+			this.listaCdEscolhido = listaCdEscolhido;
 		}
 	}
 
@@ -236,8 +230,8 @@ public class PesquisaCD extends JFrame {
 	public void pesquisar() {
 		this.setListaCdEscolhido(new ArrayList<>());
 		this.Palavrapesquisa = this.fildNomeArqSel.getText().trim();
-		this.AddLista(new SubmarinoProductsAdapter().procurar(this.Palavrapesquisa, getListaCdEscolhido()));
-		this.AddLista(new SomLivreServidorAdapter().procurar(this.Palavrapesquisa, getListaCdEscolhido()));
+
+		this.setListaCdEscolhido(pesquisaPrecoFacade.pesquisar(this.Palavrapesquisa));
 
 		if (this.getListaCdEscolhido().size() == 0) {
 			JOptionPane.showMessageDialog(null, "Não foi possível localizar nenhuma informação com este filtro!",
@@ -249,39 +243,5 @@ public class PesquisaCD extends JFrame {
 		this.carregaGrid();
 	}
 
-	public void salvar() {
-		JFileChooser fc = new JFileChooser();
-
-		// restringe a amostra a diretorios apenas
-		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		int res = fc.showOpenDialog(null);
-
-		if (res == JFileChooser.APPROVE_OPTION) {
-
-			try {
-
-				File arquivo = new File(fc.getSelectedFile() + "\\"
-						+ (this.Palavrapesquisa.isEmpty() ? "Todos" : this.Palavrapesquisa) + ".pesquisa");
-
-				if (!arquivo.exists()
-						|| JOptionPane.showConfirmDialog(null, "O arquivo já existe!!\n\rDeseja substituir?", "Atenção",
-								JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
-					FileOutputStream fout = new FileOutputStream(arquivo.getAbsolutePath());
-					ObjectOutputStream object = new ObjectOutputStream(fout);
-					object.writeObject(this.getListaCdEscolhido());
-					fout.close();
-					object.close();
-				}
-
-				JOptionPane.showMessageDialog(null, "Salvo com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
-			} catch (IOException e) {
-				e.printStackTrace();
-				JOptionPane.showMessageDialog(null, "Não foi possível salvar arquivo!", "Atenção",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-
-		} else
-			JOptionPane.showMessageDialog(null, "Não foi possível localizar o caminho escolhido!", "Atenção",
-					JOptionPane.ERROR_MESSAGE);
-	}
+	
 }

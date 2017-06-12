@@ -7,24 +7,21 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-import adapters.Cd;
+import controle.Cd;
+import controle.PesquisaPrecoFacade;
 
 public class SelecionarPesquisasSalvas extends JDialog {
 
@@ -33,13 +30,15 @@ public class SelecionarPesquisasSalvas extends JDialog {
 	private JTextField fieldDiretorio;
 	private JTable tabela;
 	private JLabel lbText, lbDiretorio;
-
+	
 	@SuppressWarnings("rawtypes")
-	private HashMap<File, ArrayList> pesquisas = null;
-
+	private HashMap<File, ArrayList> pesquisas;
+	private PesquisaPrecoFacade pesquisaPrecoFacade;
 
 	public SelecionarPesquisasSalvas() {
 		super();
+		this.pesquisas = new HashMap<>();
+		this.pesquisaPrecoFacade = PesquisaPrecoFacade.getInstaciaFacade();
 		this.configuraForm();
 	}
 
@@ -52,7 +51,6 @@ public class SelecionarPesquisasSalvas extends JDialog {
 		this.setResizable(false);
 		this.setAlwaysOnTop(false);
 		this.setLayout(null);
-		this.pesquisas = new HashMap<>();
 
 		// Adiciona componentes no formulário
 		addLabel();
@@ -128,7 +126,6 @@ public class SelecionarPesquisasSalvas extends JDialog {
 		btCancelar.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				pesquisas = null;
 				dispose();
 			}
 		});
@@ -139,55 +136,18 @@ public class SelecionarPesquisasSalvas extends JDialog {
 		btSelecionarDiretorio.setBounds(354, 20, 100, 24);
 		btSelecionarDiretorio.addActionListener(new ActionListener() {			
 			@Override
-			public void actionPerformed(ActionEvent e) {				 
-				buscaArquivos();
+			public void actionPerformed(ActionEvent e) {
+				selecionaPesquisa();
 				carregaGrid();
 			}
 		});
 		this.add(btSelecionarDiretorio);
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void buscaArquivos() {
-		JFileChooser fc = new JFileChooser();
-
-		// restringe a amostra a diretorios apenas
-		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		int res = fc.showOpenDialog(null);
-
-		if(res == JFileChooser.APPROVE_OPTION){
-
-			File diretorio = fc.getSelectedFile();
-
-			if(diretorio.isDirectory()){
-
-				fieldDiretorio.setText(diretorio.getAbsolutePath());
-				File[] files = diretorio.listFiles();
-
-				for (int i = 0; i < files.length; i++) {
-					File arq = files[i];
-					if (arq.exists() && arq.getName().contains(".pesquisa")) {
-						try {
-
-							FileInputStream fin = new FileInputStream(arq.getAbsolutePath());
-							ObjectInputStream ois = new ObjectInputStream(fin);
-							pesquisas.put(arq, (ArrayList) ois.readObject());
-							fin.close();
-							ois.close();
-
-						} catch (Exception ex) {
-							ex.printStackTrace();
-							JOptionPane.showMessageDialog(null, "Não foi possível carregar o arquivo " + arq.getName() + "!", "Atenção", JOptionPane.ERROR_MESSAGE);
-						}	
-					}
-				}
-
-				this.carregaGrid();
-			}else{
-				JOptionPane.showMessageDialog(null, "O diretório escolhido é inválido!", "Atenção", JOptionPane.ERROR_MESSAGE);				
-			}
-		}else
-			JOptionPane.showMessageDialog(null, "Não foi possível localizar o caminho escolhido!", "Atenção", JOptionPane.ERROR_MESSAGE);
+	protected void selecionaPesquisa() {
+		this.pesquisaPrecoFacade.ler();
+		this.fieldDiretorio.setText(pesquisaPrecoFacade.getDiretorioBusca());
+		this.pesquisas = pesquisaPrecoFacade.getPesquisa();		
 	}
 
 	private void carregaGrid(){
@@ -195,11 +155,12 @@ public class SelecionarPesquisasSalvas extends JDialog {
 		CellRendererToolTip renderer = new CellRendererToolTip(); 
 		DefaultTableModel tabelaModelo = new DefaultTableModel(null, new String[] { "Nome", "Data-Hora", "Caminho", "Listas"});
 		this.tabela.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				
 		
 		if(this.pesquisas != null && this.pesquisas.size() > 0){
 			int qtd = 0;
 
-			for (File file : this.pesquisas.keySet()) {		
+			for (File file : this.pesquisas.keySet()) {
 				tabelaModelo.addRow(new String[] { "Nome", "Data-Hora", "Caminho", "Listas"});
 				tabelaModelo.setValueAt(file.getName().replace(".pesquisa", ""), qtd, 0);
 				tabelaModelo.setValueAt(new SimpleDateFormat("dd/MM/yyyy - HH:MM:ss").format(file.lastModified()), qtd, 1);

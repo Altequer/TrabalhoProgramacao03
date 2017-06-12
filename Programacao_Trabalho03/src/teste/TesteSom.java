@@ -1,10 +1,10 @@
 package teste;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
-import adapters.Cd;
-import adapters.SomLivreServidorAdapter;
 import conexao.SomLivreServidor;
+import controle.Cd;
+import controle.SomLivreServidorAdapter;
 
 public class TesteSom {
 	public static void main(String[] args) {
@@ -21,10 +21,10 @@ public class TesteSom {
 		
 		SomLivreServidorAdapter adpter = new SomLivreServidorAdapter();
 		
-		ArrayList<Cd> listaAux = adpter.procurar("pitty",  new ArrayList<>());
+		HashSet<Cd> listaAux = adpter.procurar("pitty");
 		
-		for (int i = 0; i < listaAux.size(); i++) {
-			System.out.println(listaAux.get(i).toString());
+		for (Cd cd : listaAux) {
+			System.out.println(listaAux.toString());
 		}
 		
 	}
