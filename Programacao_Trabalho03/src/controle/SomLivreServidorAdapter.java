@@ -26,7 +26,7 @@ public class SomLivreServidorAdapter implements Loja {
 				for (int i = 0; i < informacoes.length; i++) {
 					String[] infos = informacoes[i].replace("|", "\n").split("\n");
 
-					if(this.isItemPesquisa(informacoes, chave, i)){
+					if(this.isItemPesquisa(infos, chave)){
 						listaPreencher.add(getCd(infos));
 					}
 				}
@@ -44,8 +44,8 @@ public class SomLivreServidorAdapter implements Loja {
 		return new Cd(infos[0], "", infos[1], "Som Livre", Float.parseFloat(infos[2].trim()));
 	}
 
-	private boolean isItemPesquisa(String[] informacoes, String chave, int index) {
-		return ((informacoes[index].toLowerCase().contains(chave)) || (informacoes[index].toLowerCase().contains(chave)));
+	private boolean isItemPesquisa(String[] informacoes, String chave) {
+		return ((informacoes[0].toLowerCase().contains(chave)) || (informacoes[1].toLowerCase().contains(chave)));
 	}
 
 	@Override

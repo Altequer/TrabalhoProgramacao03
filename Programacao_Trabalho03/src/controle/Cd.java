@@ -28,16 +28,6 @@ public class Cd implements Serializable, Comparable<Cd> {
 		return retorno;
 	}
 
-	public boolean comparar(String palavra) {
-
-		if(palavra.isEmpty() || this.getAlbum().toLowerCase().contains(palavra) || this.getBanda_artista().toLowerCase().contains(palavra) || this.getGenero().toLowerCase().contains(palavra) || this.getLoja().toLowerCase().contains(palavra)){
-			return true;
-		}
-
-		return false;
-	}
-
-
 	public String getAlbum() {
 		if(this.album != null){
 			return album;
