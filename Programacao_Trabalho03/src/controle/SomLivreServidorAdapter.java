@@ -10,7 +10,7 @@ public class SomLivreServidorAdapter implements Loja {
 	SomLivreServidor somServidor = null;
 
 	public SomLivreServidorAdapter() {
-		this.conectar();
+		this.conectar("conectar","");
 	}
 
 	@Override
@@ -49,11 +49,11 @@ public class SomLivreServidorAdapter implements Loja {
 	}
 
 	@Override
-	public boolean conectar() {
+	public boolean conectar(String usuario, String senha) {
 		try {
 
 			this.somServidor = new SomLivreServidor();
-			this.somServidor.registrar("Connectar");
+			this.somServidor.registrar(usuario);
 
 		} catch (Exception e) {
 			e.printStackTrace();

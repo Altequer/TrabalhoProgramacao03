@@ -12,15 +12,15 @@ public class  SubmarinoProductsAdapter implements Loja{
 	SubmarinoProducts subMarino = null;
 
 	public SubmarinoProductsAdapter() {
-		this.conectar();
+		this.conectar("furb", "furb");
 	}
 
 	@Override
-	public boolean conectar() {
+	public boolean conectar(String usuario, String senha) {
 		try {
 
 			this.subMarino = SubmarinoProducts.getInstance();
-			this.subMarino.connect("furb", "furb");
+			this.subMarino.connect(usuario, senha);
 
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Erro ao tentar fazer conexão com o servidor Submarino", "Atenção", JOptionPane.ERROR_MESSAGE);
