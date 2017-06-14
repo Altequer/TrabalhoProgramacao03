@@ -26,19 +26,30 @@ import controle.PesquisaPrecoFacade;
 public class SelecionarPesquisasSalvas extends JDialog {
 
 	private static final long serialVersionUID = 1;
+	//Botao de rotorno para a tela principal sem escolher nada
+	//Botao para retornar a lista que foi escolhida
+	//Botão para o usuario escolher um diretorio onde sera pesquisado pelas listas salvas
 	private JButton btCancelar, btSelecionar, btSelecionarDiretorio;
+	//Mostra diretorio escolhido pelo usuario
 	private JTextField fieldDiretorio;
+	//Tabela que informa todas as listas salvas
 	private JTable tabela;
+	//Informa o que deve ser feito na tela
+	//Informa o que deve ser feito no botão seleciona diretorio
 	private JLabel lbText, lbDiretorio;
 	
 	@SuppressWarnings("rawtypes")
+	//Uma colecao com as listas salvas<Arquivo, lista>
 	private HashMap<File, ArrayList> pesquisas;
+	//Controla a lista de cds
 	private PesquisaPrecoFacade pesquisaPrecoFacade;
-
+	
 	public SelecionarPesquisasSalvas() {
 		super();
+		//Inicia lista vazia
 		this.pesquisas = new HashMap<>();
 		this.pesquisaPrecoFacade = PesquisaPrecoFacade.getInstaciaFacade();
+		//Carrega componentes em tela
 		this.configuraForm();
 	}
 
